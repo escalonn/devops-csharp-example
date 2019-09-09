@@ -16,11 +16,13 @@ pool:
 
 steps:
 - task: UseDotNet@2
+  displayName: install .NET Core SDK
   inputs:
     packageType: 'sdk'
     useGlobalJson: true
 
 - script: dotnet build --configuration Release
+  workingDirectory: ConsoleApp
   displayName: dotnet build
 
 # i don't really have any tests

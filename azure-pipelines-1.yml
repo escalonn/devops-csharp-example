@@ -1,17 +1,33 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
 pool: Default
 
 steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'asdf'
+    organization: 'escalonn-github'
+    scannerMode: 'MSBuild'
+    projectKey: 'exampledevopsapp'
+
 - script: dotnet build
   workingDirectory: ExampleWebApp
 
 - script: dotnet test
   workingDirectory: ExampleWebApp
 
+- task: SonarCloudAnalyze@1
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Pay-As-You-Go(0518cd5b-d389-4983-9496-cdcae31dcc60)'
+    appType: 'webApp'
+    WebAppName: 'exampledevopsapp'
+    packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'

@@ -15,6 +15,11 @@ pool:
   vmImage: 'ubuntu-latest' # one of Microsoft's Ubuntu VMs.
 
 steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
 - script: dotnet build --configuration Release
   displayName: dotnet build
 
